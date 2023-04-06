@@ -155,6 +155,9 @@ while running:
                         print(f"\t\tDestroyed: {enemy.squadName} {enemy.bonusPoints} extra points awarded!!" )
                         bonus += enemy.bonusPoints
                         cntr += 1
+
+                    print(f"{enemy.squadName}-{enemy.callSign} blasted out of the sky {-enemy.health}" )
+
                     stats.markKIA( enemy )
                     enemy.kill()
                     shippoints += enemy.points
