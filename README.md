@@ -25,14 +25,16 @@ python3.10 ./mygame.py
 ```
 ## Keys
 
-Spacebar fires
+Spacebar - Launch missles
 
-F - Fire 2 missles at once
+F - Toggle capability to launch 2 missles at once
 
-B - Fire 3 missles at once
+B - (When used with F) toggles capability to launch 3 missles at once
 
 Up/Down arrow - move ship up and down on screen
 
 Left/Right arrow - move ship left and right on screen
 
-K - death blossom
+K - Eli's death blossom
+
+G - show grid (debugging)
