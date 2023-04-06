@@ -1,3 +1,5 @@
+#!/usr/bin/python3.10
+
 # Import the pygame module
 import pygame
 # Import random for random numbers
@@ -23,6 +25,7 @@ from pygame.locals import (
 
 def resetGame():
     player1.reset()
+    stats.reset()
     #print( player1 )
     for e in enemies:
         e.kill()
@@ -98,6 +101,7 @@ bang_sound2.set_volume(.6)
 # Create our 'player'
 player1 = characters.Player( move_up_sound, move_down_sound, virtualScreen)
 scoreboard = characters.ScoreBoard( scoreScreen )
+
 # Create groups to hold enemy sprites, cloud sprites, and all sprites
 # - enemies is used for collision detection and position updates
 # - clouds is used for position updates
@@ -161,6 +165,7 @@ while running:
                 else:
                     bang_sound1.play()
         stats.awardBonus( bonus )
+        stats.points += shippoints + bonus
         rocket_sound.stop()
         new_boom = characters.Boom( characters.CollisionType.MISSLE, entity.rect, bonus + shippoints )
         booms.add(new_boom)
@@ -307,7 +312,7 @@ while running:
         else:
             running = False           
 
-    scoreboard.draw( player1.health, player1.shots_fired, player1.hits, stats.getPoints() )
+    scoreboard.draw( player1.health, player1.shots_fired, stats.hits, stats.getPoints() )
 
 
     if displaygrid:
@@ -317,8 +322,7 @@ while running:
 
     for entity in all_sprites:
         screen.blit(entity.surf, entity.rect)
-        
-    # Flip everything to the display
+
     pygame.display.flip()
 
     # Ensure we maintain a 30 frames per second rate

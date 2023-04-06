@@ -19,6 +19,7 @@ class imageResources:
     BULLET_IMAGE_FILE = "resources/missile.png"
     PLAYER_IMAGE_FILE = "resources/plane2.png"
     GAME_BACKGROUND = "resources/background.png"
+    NUMBER_0 = "resources/b{}.png"
 
 class CharacterSprite( pygame.sprite.Sprite):
     def __init__(self, virtualScreen):
@@ -198,7 +199,7 @@ class Squadron(CharacterSprite):
         xr = random.randint(1,5)
         callsign = 1
         bonusPoints = self.calculateBonusPoints( ary, xr )
-        squadName = squadName + "-" + str(5) + "-" + random.choice(greek)
+        squadName = squadName + "-" + str(len(ary)) + "-" + random.choice(greek)
         ships = []
         for j in ary:
             new_ss = SquadShip( self.virtualScreen, j[0], [self.virtualScreen.width+j[1], y+j[2]], speed, xr)
@@ -329,6 +330,27 @@ class Boom(pygame.sprite.Sprite ):
         self.surf = self.images[self.frame]
 
 
+class Number(CharacterSprite):
+    def __init__(self, virtualScreen, numb):
+        super().__init__(virtualScreen)
+        
+
+        self.loadImageFile( imageResources.NUMBER_0.format(numb), 1 )
+        # Flip the missel around
+        sz = self.surf.get_size()
+        shipSize = ( virtualScreen.height - 10 ) / sz[1]
+        img = pygame.transform.scale(self.surf, (int(sz[0]*shipSize), int(sz[1]*shipSize)))
+
+        self.surf = img
+        self.rect = pygame.Rect( self.surf.get_rect() )
+        self.rect.top = 5
+        self.rect.left = 500 + ( self.surf.get_width() + 5 ) * numb
+
+    def __str__(self):
+        s = dumpRect( "Number", self.rect) 
+        s = s + f"\n\tSpeed: {self.speed}"
+        return s
+
 
 class Bullet(CharacterSprite):
     def __init__(self, player, rocket_sound, virtualScreen, vertspeed):
@@ -450,11 +472,25 @@ class ScoreBoard(CharacterSprite):
         self.font = pygame.font.Font(None, 24)
         self.font = pygame.font.SysFont("couriernew", 24, bold=True)
 
+        self.bigdigits = [ ]
+        for i in range(0,10):
+            self.bigdigits.append( Number( virtualScreen, i ) )
+        self.slots = []
+        self.SCOREDIGITS = 7
+        for i in range(0,self.SCOREDIGITS):
+            r = pygame.Rect( 0, 5, self.bigdigits[0].rect.width, self.bigdigits[0].rect.height)
+            r.left = virtualScreen.width - 25 - ( self.SCOREDIGITS - i ) * ( r.width + 5 ) 
+            self.slots.append( pygame.Rect( r ) )
+
+
     def draw(self, health, shots_fired, hits, points):
         pygame.draw.rect(self.surf, (131,139,139), self.virtualScreen, 0)
         pygame.draw.rect(self.surf, (119, 136, 153), self.virtualScreen, 5)
         pygame.draw.circle( self.surf, (0,0,0), (30,30), 15 )
         pygame.draw.circle( self.surf, (255,255,0), (30,30), 15, draw_top_right=True, draw_bottom_left=True )
+        s = [int(d) for d in "{:07d}".format(points)]
+        for i in range(0,len(s)):
+            self.surf.blit( self.bigdigits[int(s[i])].surf, self.slots[i] )
 
 
         healthcolor = "darkgreen"
@@ -467,9 +503,8 @@ class ScoreBoard(CharacterSprite):
         else:
             score_text2 = self.font.render(f'   H/S: {hits}/{shots_fired} ({100:.0f}%)', True, "darkgreen")
         self.surf.blit(score_text2, (10, 30))
-        score_text3 = self.font.render(f'Points: {points:,}', True, "darkgreen")
-        
-        self.surf.blit(score_text3, (self.virtualScreen.width - score_text3.get_width() - 20, 10))
+        #score_text3 = self.font.render(f'Points: {points:,}', True, "darkgreen")
+        #self.surf.blit(score_text3, (self.virtualScreen.width - score_text3.get_width() - 20, 10))
 
     # Never move this 
     def update(self):
@@ -488,12 +523,15 @@ class GameStats:
         self.kills += 1
         self.points += ship.points
     def __init__(self):
-        self.playershots = 0
+        self.reset()
+
+    def getPoints( self ):
+        return self.points
+    def reset( self ):
         self.points = 0
         self.hits = 0
         self.kills = 0
-    def getPoints( self ):
-        return self.points
+        self.playershots = 0
     def fire(self, count=1):
         self.playershots += count
     def __str__(self):
