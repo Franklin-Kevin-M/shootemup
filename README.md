@@ -18,10 +18,13 @@ Ensure you have pygame installed
 ## Keys
 
 Spacebar fires
-:F - Fire 2 missles at once
-:B - Fire 3 missles at once
 
-:Up/Down arrow - move ship up and down on screen
-:Left/Right arrow - move ship left and right on screen
+F - Fire 2 missles at once
 
-:K - death blossom
+B - Fire 3 missles at once
+
+Up/Down arrow - move ship up and down on screen
+
+Left/Right arrow - move ship left and right on screen
+
+K - death blossom
