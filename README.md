@@ -14,17 +14,14 @@ pip3 install pygame
 
 Download the app from github.
 
-Click the "code" button above and download the zip file.  Or however you go about getting apps from github.  Once files are extracted to a directory start a command prompt and cd into the directory where the .py files are located.  Then launch the game as follows:
+Click the "code" button above and download the zip file.  Or however you go about getting apps from github.  Once files are extracted to a directory start a command prompt and cd into the directory where the .py files are located.  Then launch the game as detailed in the usage section.
 
-```bash
-python3.10 ./mygame.py
-```
 Important the resources directory must be a subdirectory to where you launch the application since I use relative path/file references.
 
 ## Usage
 
 ```bash
-./mygame.py
+python3.10 ./mygame.py
 ```
 ## Keys
 
