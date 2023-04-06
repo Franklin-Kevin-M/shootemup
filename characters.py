@@ -25,11 +25,11 @@ class CharacterSprite( pygame.sprite.Sprite):
     def __init__(self, virtualScreen):
         super().__init__()
         self.virtualScreen = pygame.Rect(virtualScreen)
-    def loadImageFile( self, file, shipSize ):
+    def loadImageFile( self, file, numberSize ):
         img = pygame.image.load( file )
-        if shipSize != 1:
+        if numberSize != 1:
             sz = img.get_size()
-            img = pygame.transform.scale(img, (int(sz[0]*shipSize), int(sz[1]*shipSize)))
+            img = pygame.transform.scale(img, (int(sz[0]*numberSize), int(sz[1]*numberSize)))
         self.surf = img.convert()
         transColor = self.surf.get_at((0,0))
         self.surf.set_colorkey(transColor, RLEACCEL)
@@ -236,18 +236,18 @@ class SquadShip(CharacterSprite):
         s = s + dumpRect( "Rectangle", self.rect) 
         return s
 
-    def initImage(self, shipType, location, xr, shipSize=1):
+    def initImage(self, shipType, location, xr, numberSize=1):
         if shipType == EnemyShipType.PLAYER_SHIP:
-            self.loadImageFile( imageResources.PLAYER_IMAGE_FILE, shipSize )
+            self.loadImageFile( imageResources.PLAYER_IMAGE_FILE, numberSize )
             self.health = 5
         if shipType == EnemyShipType.LARGE_SHIP:
-            self.loadImageFile( imageResources.ENEMY_IMAGE3_FILE, shipSize )
+            self.loadImageFile( imageResources.ENEMY_IMAGE3_FILE, numberSize )
             self.health = 5
         if shipType == EnemyShipType.MEDIUM_SHIP:
-            self.loadImageFile( imageResources.ENEMY_IMAGE2_FILE, shipSize )
+            self.loadImageFile( imageResources.ENEMY_IMAGE2_FILE, numberSize )
             self.health = 3
         if shipType == EnemyShipType.SMALL_SHIP:
-            self.loadImageFile( imageResources.ENEMY_IMAGE1_FILE, shipSize )
+            self.loadImageFile( imageResources.ENEMY_IMAGE1_FILE, numberSize )
             self.health = 1
         self.rect = pygame.Rect( location[0], location[1], self.surf.get_width(), self.surf.get_height())
         self.valid = True
@@ -264,9 +264,9 @@ class SquadShip(CharacterSprite):
             self.upgraded = True
             self.points += self.points
 
-    def __init__(self, virtualScreen, shipType, location, speed, xr, shipSize=1 ):
+    def __init__(self, virtualScreen, shipType, location, speed, xr, numberSize=1 ):
         super().__init__(virtualScreen)
-        self.initImage(shipType, location, xr, shipSize)
+        self.initImage(shipType, location, xr, numberSize)
         self.configure( shipType, speed, xr)
     def update(self):
         self.rect.move_ip(-self.speed, 0)
@@ -333,13 +333,11 @@ class Boom(pygame.sprite.Sprite ):
 class Number(CharacterSprite):
     def __init__(self, virtualScreen, numb):
         super().__init__(virtualScreen)
-        
 
         self.loadImageFile( imageResources.NUMBER_0.format(numb), 1 )
-        # Flip the missel around
         sz = self.surf.get_size()
-        shipSize = ( virtualScreen.height - 10 ) / sz[1]
-        img = pygame.transform.scale(self.surf, (int(sz[0]*shipSize), int(sz[1]*shipSize)))
+        numberSize = ( virtualScreen.height - 10 ) / sz[1]
+        img = pygame.transform.scale(self.surf, (int(sz[0]*numberSize), int(sz[1]*numberSize)))
 
         self.surf = img
         self.rect = pygame.Rect( self.surf.get_rect() )
