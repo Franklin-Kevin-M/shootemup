@@ -18,7 +18,7 @@ pip3 install pygame
 ## Keys
 
 Spacebar fires
-F - Fire 2 missles at noce
+F - Fire 2 missles at once
 B - Fire 3 missles at once
 
 Up/Down arrow - move ship up and down on screen
