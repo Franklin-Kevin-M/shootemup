@@ -9,12 +9,12 @@ You must have at least Python 3.6
 
 ```bash
 pip3 install pygame
-
+```
 ## Usage
 
 ```bash
 ./mygame.py
-
+```
 ## Keys
 
 Spacebar fires
