@@ -307,6 +307,8 @@ while running:
 
     # Stop the loop
     if player1.health <= 0 and player1.rect.bottom > virtualScreen.bottom-player1.rect.height-scoreScreen.bottom:
+        for b in bullets:
+            b.kill()
         result = about.doModal( str( stats.getPoints() ))
         if result == "play":
             resetGame()
